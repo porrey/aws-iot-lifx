@@ -1,0 +1,355 @@
+﻿<common:BindablePage x:Class="AwsLifxControl.Views.MainPage"
+					 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					 xmlns:local="using:AwsLifxControl.Views"
+					 xmlns:common="using:AwsLifxControl.Common"
+					 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+					 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+					 mc:Ignorable="d"
+					 NavigationCacheMode="Required">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="130" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="100" />
+		</Grid.RowDefinitions>
+
+		<!-- Title -->
+		<Grid Grid.Row="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*" />
+				<RowDefinition Height="1*" />
+				<RowDefinition Height="10" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="50" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="50" />
+			</Grid.ColumnDefinitions>
+
+			<!-- Menu Button -->
+			<Button Grid.Row="1"
+					Grid.Column="0"
+					x:Name="menuButton"
+					Margin="2,5,0,5"
+					VerticalAlignment="Bottom"
+					HorizontalAlignment="Left"
+					Click="MenuButton_Click"
+					Width="46"
+					Height="46"
+					IsEnabled="{x:Bind IsBusy, Mode=OneWay, Converter={StaticResource InvertedBooleanConverter}}">
+				<Button.Content>
+					<FontIcon Glyph="&#xE700;" />
+				</Button.Content>
+			</Button>
+
+			<Image Grid.Column="2"
+				   Grid.ColumnSpan="1"
+				   Grid.Row="0"
+				   VerticalAlignment="Center"
+				   HorizontalAlignment="Center"
+				   Source="ms-appx:///Assets/LIFX_logo.png"
+				   Margin="0,0,10,0"
+				   Width="34"
+				   Height="34"
+				   Opacity="0.85" />
+
+			<Image Grid.Column="0"
+				   Grid.ColumnSpan="1"
+				   Grid.Row="0"
+				   VerticalAlignment="Center"
+				   HorizontalAlignment="Center"
+				   Source="ms-appx:///Assets/aws-logo.png"
+				   Margin="10,0,0,0"
+				   Width="34"
+				   Height="26" />
+
+			<TextBlock Grid.Row="0"
+					   Grid.Column="1"
+					   Text="[Page_Header]"
+					   x:Uid="Page_Header"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"
+					   Style="{ThemeResource HeaderTextBlockStyle}"
+					   Foreground="{ThemeResource SystemControlHyperlinkTextBrush}"
+					   FontSize="36"
+					   Margin="0,10,0,0" />
+
+			<TextBlock Grid.Row="1"
+					   Grid.Column="1"
+					   Text="[Page_Main_Subtitle]"
+					   x:Uid="Page_Main_Subtitle"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"
+					   Style="{ThemeResource SubheaderTextBlockStyle}"
+					   Foreground="{ThemeResource SystemControlHyperlinkBaseMediumBrush}"
+					   FontSize="24"
+					   Margin="0,0,0,10" />
+
+			<ProgressBar Grid.Row="2"
+						 Grid.ColumnSpan="3"
+						 IsIndeterminate="true"
+						 Visibility="{x:Bind IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+		</Grid>
+
+		<!-- Main Page Content -->
+		<SplitView Grid.Row="1"
+				   x:Name="SplitView"
+				   IsPaneOpen="{x:Bind IsPaneOpen, Mode=TwoWay}"
+				   Margin="15,5,15,5">
+			<!-- Menu -->
+			<SplitView.Pane>
+				<StackPanel Orientation="Vertical">
+					<!-- LIFX API Setup-->
+					<HyperlinkButton Command="{Binding LifxSetup}"
+									 Style="{ThemeResource PivotTitleContentControlStyle}"
+									 Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+									 Click="LifxMenuItem_Click">
+						<HyperlinkButton.Content>
+							<StackPanel Orientation="Horizontal">
+								<SymbolIcon Symbol="Edit"
+											Margin="5,5,5,5" />
+								<TextBlock Text="LIFX API Setup"
+										   VerticalAlignment="Center"
+										   Margin="10,0,10,0" />
+							</StackPanel>
+						</HyperlinkButton.Content>
+					</HyperlinkButton>
+
+					<!-- AWS Setup-->
+					<HyperlinkButton Command="{Binding AwsSetup}"
+									 Style="{ThemeResource PivotTitleContentControlStyle}"
+									 Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+									 Click="AwsMenuItem_Click">
+						<HyperlinkButton.Content>
+							<StackPanel Orientation="Horizontal">
+								<SymbolIcon Symbol="Edit"
+											Margin="5,5,5,5" />
+								<TextBlock Text="AWS Setup"
+										   VerticalAlignment="Center"
+										   Margin="10,0,10,0" />
+							</StackPanel>
+						</HyperlinkButton.Content>
+					</HyperlinkButton>
+
+					<!-- Separator-->
+					<Rectangle Height="1"
+							   Margin="10,5,10,5"
+							   Fill="{ThemeResource ApplicationForegroundThemeBrush}" />
+
+					<!-- Refresh-->
+					<HyperlinkButton Command="{Binding AwsSetup}"
+									 Style="{ThemeResource PivotTitleContentControlStyle}"
+									 Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+									 Click="RefreshMenuItem_Click">
+						<HyperlinkButton.Content>
+							<StackPanel Orientation="Horizontal">
+								<SymbolIcon Symbol="Refresh"
+											Margin="5,5,5,5" />
+								<TextBlock Text="Refresh"
+										   VerticalAlignment="Center"
+										   Margin="10,0,10,0" />
+							</StackPanel>
+						</HyperlinkButton.Content>
+					</HyperlinkButton>
+
+					<!-- Separator-->
+					<Rectangle Height="1"
+							   Margin="10,5,10,5"
+							   Fill="{ThemeResource ApplicationForegroundThemeBrush}" />
+
+					<!-- Reset Settings-->
+					<HyperlinkButton Command="{Binding AwsSetup}"
+									 Style="{ThemeResource PivotTitleContentControlStyle}"
+									 Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+									 Click="ResetSettingsMenuItem_Click">
+						<HyperlinkButton.Content>
+							<StackPanel Orientation="Horizontal">
+								<SymbolIcon Symbol="ReShare"
+											Margin="5,5,5,5" />
+								<TextBlock Text="Reset Settings"
+										   VerticalAlignment="Center"
+										   Margin="10,0,10,0" />
+							</StackPanel>
+						</HyperlinkButton.Content>
+					</HyperlinkButton>
+
+				</StackPanel>
+			</SplitView.Pane>
+
+			<!-- Page Content -->
+			<SplitView.Content>
+				<!-- Scene Selection -->
+				<StackPanel Grid.Row="1"
+							Orientation="Vertical">
+					<TextBlock Text="[Page_Main_SceneSelectionTitle]"
+							   x:Uid="Page_Main_SceneSelectionTitle"
+							   HorizontalAlignment="Left"
+							   VerticalAlignment="Top"
+							   Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+					<TextBlock Text="[Page_Main_SceneSelectionDescription]"
+							   x:Uid="Page_Main_SceneSelectionDescription"
+							   HorizontalAlignment="Left"
+							   FontWeight="SemiBold"
+							   TextWrapping="WrapWholeWords"
+							   Style="{ThemeResource BodyTextBlockStyle}"
+							   Margin="0,15,0,15" />
+
+					<Grid Margin="0,5,0,5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="1*" />
+							<ColumnDefinition Width="2*" />
+						</Grid.ColumnDefinitions>
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="1*" />
+							<RowDefinition Height="1*" />
+							<RowDefinition Height="1*" />
+						</Grid.RowDefinitions>
+
+						<!-- Single Click Event -->
+						<TextBlock Grid.Row="0"
+								   Grid.Column="0"
+								   Text="[Page_Main_SingleClickTitle]"
+								   x:Uid="Page_Main_SingleClickTitle"
+								   HorizontalAlignment="Left"
+								   VerticalAlignment="Top"
+								   Style="{ThemeResource BodyTextBlockStyle}" />
+						<StackPanel Grid.Row="0"
+									Grid.Column="1"
+									Orientation="Vertical"
+									VerticalAlignment="Top"
+									HorizontalAlignment="Stretch">
+
+							<ComboBox x:Name="SingleClickSceneList"
+									  Margin="0,0,0,15"
+									  HorizontalAlignment="Stretch"
+									  ItemsSource="{x:Bind SingleClickSceneItems}"
+									  SelectionChanged="ComboBox_SelectionChanged"
+									  IsEnabled="{x:Bind IsBusy, Converter={StaticResource InvertedBooleanConverter}, Mode=OneWay}" />
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock x:Uid="Page_Main_OnOffDuration"
+										   Text="[Page_Main_OnOffDuration]" />
+								<TextBlock Text="{x:Bind SingleClickDuration, Converter={StaticResource DurationValueToTimeStringConverter}, Mode=OneWay}"
+										   Margin="10, 0, 0,0" />
+							</StackPanel>
+
+							<Slider Value="{x:Bind SingleClickDuration, Mode=TwoWay}"
+									Minimum="1"
+									Maximum="10"
+									LargeChange="5" />
+						</StackPanel>
+
+						<!-- Double-click Event -->
+						<TextBlock Grid.Row="1"
+								   Grid.Column="0"
+								   Text="[Page_Main_DoubleClickTitle]"
+								   x:Uid="Page_Main_DoubleClickTitle"
+								   HorizontalAlignment="Left"
+								   VerticalAlignment="Top"
+								   Style="{ThemeResource BodyTextBlockStyle}" />
+						<StackPanel Grid.Row="1"
+									Grid.Column="1"
+									Orientation="Vertical"
+									HorizontalAlignment="Stretch">
+
+							<ComboBox x:Name="DoubleClickSceneList"
+									  Margin="0,0,0,15"
+									  HorizontalAlignment="Stretch"
+									  ItemsSource="{x:Bind DoubleClickSceneItems}"
+									  SelectionChanged="ComboBox_SelectionChanged"
+									  IsEnabled="{x:Bind IsBusy, Mode=OneWay, Converter={StaticResource InvertedBooleanConverter}}" />
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock x:Uid="Page_Main_OnOffDuration"
+										   Text="[Page_Main_OnOffDuration]" />
+								<TextBlock Text="{x:Bind DoubleClickDuration, Mode=OneWay, Converter={StaticResource DurationValueToTimeStringConverter}}"
+										   Margin="10, 0, 0,0" />
+							</StackPanel>
+
+							<Slider Value="{x:Bind DoubleClickDuration, Mode=TwoWay}"
+									Minimum="1"
+									Maximum="10"
+									LargeChange="5" />
+						</StackPanel>
+
+						<!-- Long-click Event -->
+						<TextBlock Grid.Row="2"
+								   Grid.Column="0"
+								   Text="[Page_Main_LongClickTitle]"
+								   x:Uid="Page_Main_LongClickTitle"
+								   HorizontalAlignment="Left"
+								   VerticalAlignment="Top"
+								   Style="{ThemeResource BodyTextBlockStyle}" />
+						<StackPanel Grid.Row="2"
+									Grid.Column="1"
+									Orientation="Vertical"
+									HorizontalAlignment="Stretch">
+
+							<ComboBox x:Name="LongClickSceneList"
+									  Margin="0,0,0,15"
+									  HorizontalAlignment="Stretch"
+									  ItemsSource="{x:Bind LongClickSceneItems}"
+									  SelectionChanged="ComboBox_SelectionChanged"
+									  IsEnabled="{x:Bind IsBusy, Mode=OneWay, Converter={StaticResource InvertedBooleanConverter}}" />
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock x:Uid="Page_Main_OnOffDuration"
+										   Text="[Page_Main_OnOffDuration]" />
+								<TextBlock Text="{x:Bind LongClickDuration, Mode=OneWay, Converter={StaticResource DurationValueToTimeStringConverter}}"
+										   Margin="10, 0, 0,0" />
+							</StackPanel>
+
+							<Slider Value="{x:Bind LongClickDuration, Mode=TwoWay}"
+									Minimum="1"
+									Maximum="10"
+									LargeChange="5" />
+						</StackPanel>
+					</Grid>
+				</StackPanel>
+			</SplitView.Content>
+		</SplitView>
+
+		<!-- Error Section -->
+		<Grid Grid.Row="2"
+			  Background="DarkRed"
+			  Visibility="{x:Bind PageHasException, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+			  Margin="2,2,2,2">
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="35" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="2*" />
+				<RowDefinition Height="3*" />
+			</Grid.RowDefinitions>
+
+			<Image Grid.Row="0"
+				   Grid.Column="0"
+				   Source="ms-appx:///Assets/error.png"
+				   Margin="2,2,2,2" />
+
+			<TextBlock Grid.Row="0"
+					   Grid.Column="1"
+					   Text="{x:Bind PageExceptionTitle, Mode=OneWay}"
+					   VerticalAlignment="Center"
+					   HorizontalAlignment="Left"
+					   FontWeight="Bold"
+					   Margin="5,2,2,2" />
+
+			<TextBlock Grid.Row="1"
+					   Grid.Column="1"
+					   VerticalAlignment="Top"
+					   HorizontalAlignment="Left"
+					   Text="{x:Bind PageExceptionDescription, Mode=OneWay}"
+					   Margin="5,2,2,2"
+					   TextWrapping="WrapWholeWords" />
+		</Grid>
+	</Grid>
+</common:BindablePage>
