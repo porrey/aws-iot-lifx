@@ -25,8 +25,8 @@ namespace AwsLifxControl.Common
 			{
 				public const string TableName = "Lifx";
 				public const string Key = "Id";
-				public const int ReadCapacityUnits = 5;
-				public const int WriteCapacityUnits = 5;
+				public const int ReadCapacityUnits = 100;
+				public const int WriteCapacityUnits = 50;
 
 				public static class Property
 				{
